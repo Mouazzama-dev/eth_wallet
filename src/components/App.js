@@ -26,15 +26,18 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
     const accounts = await web3.eth.getAccounts()
+    // console.log(accounts)
     this.setState({ account: accounts[0] })
-    const daiTokenAddress = "0x7b729B07EcBDEd8879Acf997aAF6546926982830" // Replace DAI Address Here
+    const daiTokenAddress = "0x4E62B72Ad1273E2D14f9E401BfC2f1C391cEb697" // Replace DAI Address Here
     const daiTokenMock = new web3.eth.Contract(DaiTokenMock.abi, daiTokenAddress)
     this.setState({ daiTokenMock: daiTokenMock })
+    // console.log(this.state.daiTokenMock)
     const balance = await daiTokenMock.methods.balanceOf(this.state.account).call()
+    // console.log(balance.toString())
     this.setState({ balance: web3.utils.fromWei(balance.toString(), 'Ether') })
     const transactions = await daiTokenMock.getPastEvents('Transfer', { fromBlock: 0, toBlock: 'latest', filter: { from: this.state.account } })
     this.setState({ transactions: transactions })
-    console.log(transactions)
+    // console.log(transactions)
   }
 
   transfer(recipient, amount) {
